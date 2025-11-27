@@ -4,4 +4,6 @@
 **__pycache__**
 /others
 /scripts
+.vscode
+.DS_Store
 
