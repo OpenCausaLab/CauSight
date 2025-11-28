@@ -1,4 +1,4 @@
-vllm serve /path/to/your/model  \
+vllm serve ./model/  \
 --port 8000 \
 --trust-remote-code \
 --disable-log-requests \

@@ -115,10 +115,6 @@ def restore_bbox(cropped_bbox, crop_info):
     
     return [restored_x1, restored_y1, restored_x2, restored_y2]
 
-def get_image_path(data_path):
-    # TODO: implement this function
-    return "/user/zhangyize/projects/DeepEyes/mcts/tests/output.jpg"
-
 def get_gt_pairs(data):
     raw_entities = data['entities']
     entities = []

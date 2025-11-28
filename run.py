@@ -13,9 +13,9 @@ from utils.utils import get_gt_pairs
 from utils.evaluate import evaluate, vanilla_inference
 
 def get_data():
-    with open("./data/coco_train.jsonl", "r") as f:
+    with open("VCG-32K/COCO/annotations/train.jsonl", "r") as f:
         all_data = [json.loads(line) for line in f]
-        all_data = all_data[0:1000]
+        all_data = all_data[0:100]
     return all_data
 
 def setup_logging():
@@ -40,14 +40,14 @@ def main():
 
     for data in all_data:
         try:
-            raw_path = data['images'][0]['image']
-            id = raw_path.split('COCO/')[-1].split('.')[0]
-            image_path = f'/path/to/your/COCO/images/{id}.jpg'
+            image_path = data['images'][0]['image']
+            id = image_path.split('train/')[-1].split('.')[0]
+            image_path = f"VCG-32K/{image_path}"
         except:
             logging.error("error in finding image path")
             continue
 
-        os.makedirs(f"/user/CauSight/mcts/temp/{id}", exist_ok=True)
+        os.makedirs(f"temp/{id}", exist_ok=True)
         task = MCTSTask(data=data, data_idx=id, image_path=image_path, image_server=image_server)
 
         root_node, search_metric = task.run()
@@ -69,7 +69,7 @@ def main():
         best_leaf_node.state['image_path'] = image_path
         best_leaf_node.state["search_metric"] = search_metric
 
-        with open(f"output/raw_sft_data_(0-1000).jsonl", "a") as f:
+        with open(f"ToCT/raw_sft_data.jsonl", "a") as f:
             json.dump(best_leaf_node.state, f)
             f.write("\n")
 
@@ -86,11 +86,11 @@ def main():
                     "image_path": image_path,
                     "trajectory": f"{best_leaf_node.state['trajectory']}<'causal pairs'>\n{str(best_leaf_node.state['causal_pairs'])}\n</causal pairs>"
                 }
-            with open(f"output/sft_data_(0-1000).jsonl", "a") as f:
+            with open(f"ToCT/sft_data.jsonl", "a") as f:
                 json.dump(sft, f)
                 f.write("\n")
 
-        shutil.rmtree(f"/user/CauSight/mcts/temp/{id}")
+        shutil.rmtree(f"temp/{id}")
 
     image_server.stop()
 

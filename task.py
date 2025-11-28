@@ -10,7 +10,7 @@ import tempfile
 from utils.img_server import process_image_path
 from utils.vllm_infer import generate
 from utils.prompt import *
-from utils.utils import zoom_in, get_image_path, get_gt_pairs, extract_content, match_detections_to_gt
+from utils.utils import zoom_in, get_gt_pairs, extract_content, match_detections_to_gt
 from utils.evaluate import evaluate
 
 from node import TreeNode
@@ -97,11 +97,11 @@ class MCTSTask:
                     current_region = current_node.state['current_region']
                     bbox = current_region[1]
                     try:
-                        idid = self.data_idx.split('.')[0]
+                        idid = self.data_idx.split('.')[0] if '.' in self.data_idx else self.data_idx
                         temp_file = tempfile.NamedTemporaryFile(
                             suffix='.jpg', 
                             delete=False,
-                            dir=f'/user/CauSight/mcts/temp/{idid}'  # 指定目录
+                            dir=f'temp/{idid}'  # 指定目录
                         )
                         self.temp_image_path = temp_file.name
                         temp_file.close()
@@ -178,16 +178,6 @@ class MCTSTask:
         except Exception as e:
             logging.error(f"Error during MCTS search: {str(e)}")
             raise
-
-    def traverse_tree(self, node):
-        """
-        Traverse the tree and save results to a JSON file.
-
-        Args:
-            node: Current node to traverse. If None, starts from root_node
-            output_file: Path to output file
-        """
-        pass
 
     def get_best_path(self, node):
         """
