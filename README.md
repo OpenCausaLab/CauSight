@@ -1,5 +1,7 @@
 # CauSight: Learning to Supersense for Visual Causal Discovery
 
+>[[Dataset]](https://huggingface.co/datasets/OpenCausaLab/VCG-32K) [[Model]](https://huggingface.co/OpenCausaLab/CauSight)
+
 ## 🔧 User Guide
 
 ### 1. Clone the Repository
