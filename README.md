@@ -2,11 +2,27 @@
   <img src="asset/title.png">
 </p>
 
+<div id="top" align="center">
+
 **CauSight**: *Learning to Supersense for **Visual Causal Discovery***
 
 >[[Dataset]](https://huggingface.co/datasets/OpenCausaLab/VCG-32K) [[Model]](https://huggingface.co/OpenCausaLab/CauSight) [[Paper]](https://arxiv.org/abs/2512.01827)
 
-## 🔧 User Guide
+</div>
+
+## 🔥 Highlights
+
+<p align="center">
+  <img src="asset/pipeline.png">
+</p>
+
+we introduce the task of visual causal discovery. It requires models to infer cause-and-effect relations among visual entities across diverse scenarios instead of merely perceiving their presence. we first construct the Visual Causal Graph dataset (VCG-32K), a large-scale collection of over 32,000 images annotated with entity-level causal graphs, and further develop CauSight, a novel vision-language model to perform visual causal discovery through causally aware reasoning. Our training recipe integrates three components: (1) training data curation from VCG-32K, (2) Tree-of-Causal-Thought (ToCT) for synthesizing reasoning trajectories, and (3) reinforcement learning with a designed causal reward to refine the reasoning policy. Experiments show that CauSight outperforms GPT-4.1 on visual causal discovery, achieving over a threefold performance boost (21% absolute gain).
+
+<p align="center">
+  <img src="asset/result.png">
+</p>
+
+## 🔧 Getting Started
 
 ### 1. Clone the Repository
 
@@ -62,9 +78,21 @@ bash model_server.sh
 python run_inference.py
 ```
 
-### 6. Tree-of-Causal-Thought (If you want to make your own SFT data with ToCT.)
+### 6. Tree-of-Causal-Thought 
+
+If you want to make your own SFT data with Tree-of-Causal-Thought, run:
 
 ```bash
 bash model_server.sh
 python run.py
+```
+
+## Citation
+```BibTeX
+@article{zhang2025causight,
+  title={CauSight: Learning to Supersense for Visual Causal Discovery},
+  author={Zhang, Yize and Chen, Meiqi and Chen, Sirui and Peng, Bo and Zhang, Yanxi and Li, Tianyu and Lu, Chaochao},
+  journal={arXiv preprint arXiv:2512.01827},
+  year={2025}
+}
 ```
