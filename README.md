@@ -1,4 +1,8 @@
-# CauSight: Learning to Supersense for Visual Causal Discovery
+<p align="center">
+  <img src="asset/title.png">
+</p>
+
+**CauSight**: *Learning to Supersense for **Visual Causal Discovery***
 
 >[[Dataset]](https://huggingface.co/datasets/OpenCausaLab/VCG-32K) [[Model]](https://huggingface.co/OpenCausaLab/CauSight) [[Paper]](https://arxiv.org/abs/2512.01827)
 
