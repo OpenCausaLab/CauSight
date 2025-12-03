@@ -12,14 +12,10 @@
 
 ## 🔥 Highlights
 
+We introduce the task of **visual causal discovery**. It requires models to infer cause-and-effect relations among visual entities across diverse scenarios instead of merely perceiving their presence. we first construct the Visual Causal Graph dataset (**VCG-32K**), a large-scale collection of over 32,000 images annotated with entity-level causal graphs, and further develop **CauSight**, a novel vision-language model to perform visual causal discovery through causally aware reasoning. Our training recipe integrates three components: (1) training data curation from VCG-32K, (2) Tree-of-Causal-Thought (ToCT) for synthesizing reasoning trajectories, and (3) reinforcement learning with a designed causal reward to refine the reasoning policy. Experiments show that CauSight outperforms GPT-4.1 on visual causal discovery, achieving over a **threefold performance boost**.
+
 <p align="center">
   <img src="asset/pipeline.png">
-</p>
-
-we introduce the task of visual causal discovery. It requires models to infer cause-and-effect relations among visual entities across diverse scenarios instead of merely perceiving their presence. we first construct the Visual Causal Graph dataset (VCG-32K), a large-scale collection of over 32,000 images annotated with entity-level causal graphs, and further develop CauSight, a novel vision-language model to perform visual causal discovery through causally aware reasoning. Our training recipe integrates three components: (1) training data curation from VCG-32K, (2) Tree-of-Causal-Thought (ToCT) for synthesizing reasoning trajectories, and (3) reinforcement learning with a designed causal reward to refine the reasoning policy. Experiments show that CauSight outperforms GPT-4.1 on visual causal discovery, achieving over a threefold performance boost (21% absolute gain).
-
-<p align="center">
-  <img src="asset/result.png">
 </p>
 
 ## 🔧 Getting Started
