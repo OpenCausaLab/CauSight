@@ -32,7 +32,7 @@ cd CauSight
 We recommend using **conda**:
 
 ```bash
-conda create -n causight python=3.10
+conda create -n causight python=3.11
 conda activate causight
 
 pip install -r requirements.txt
