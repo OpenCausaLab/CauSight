@@ -8,7 +8,6 @@ from scipy.optimize import linear_sum_assignment
 import logging
 
 def extract_content(mark,text):
-    # 提取 <mark></mark> 中间的内容
     pattern = f'<{mark}>(.*?)</{mark}>'
     match = re.search(pattern, text, re.DOTALL)
 
@@ -21,17 +20,6 @@ def extract_content(mark,text):
 
 
 def zoom_in(image_path: str, bbox: str, output_path: str):
-    """
-    根据 bounding box 裁剪图像
-    
-    Args:
-        image_path (str): 输入图像路径
-        bbox (list or str): [x1, y1, x2, y2] 格式的边界框坐标
-        output_path (str, optional): 输出图像路径，如果为 None 则不保存
-    
-    Returns:
-        dict: 裁剪区域信息，用于后续坐标还原
-    """
     if isinstance(bbox, str):
         try:
             bbox = ast.literal_eval(bbox)
@@ -39,15 +27,15 @@ def zoom_in(image_path: str, bbox: str, output_path: str):
             try:
                 bbox = json.loads(bbox)
             except json.JSONDecodeError as e:
-                raise ValueError(f"无法解析 bbox 字符串: {bbox}") from e
+                raise ValueError(f"Failed to parse bbox string: {bbox}") from e
     
     if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
-        raise ValueError(f"bbox 必须是包含4个数字的列表或元组: {bbox}")
+        raise ValueError(f"bbox must be a list or tuple containing 4 numbers: {bbox}")
     
     try:
         x1, y1, x2, y2 = map(float, bbox)
     except (ValueError, TypeError) as e:
-        raise ValueError(f"bbox 坐标必须是数字: {bbox}") from e
+        raise ValueError(f"bbox coordinates must be numbers: {bbox}") from e
 
     image = Image.open(image_path)
     
@@ -58,16 +46,16 @@ def zoom_in(image_path: str, bbox: str, output_path: str):
     y2 = max(0, min(y2, height))
     
     if x2 <= x1 or y2 <= y1:
-        raise ValueError(f"无效的 bbox 坐标: {bbox}")
+        raise ValueError(f"Invalid bbox coordinates: {bbox}")
     
     cropped_image = image.crop((x1, y1, x2, y2))
     
     if output_path:
         try:
             cropped_image.save(output_path)
-            print(f"裁剪后的图像已保存到: {output_path}")
+            print(f"Cropped image saved to: {output_path}")
         except Exception as e:
-            raise IOError(f"保存裁剪后的图像失败: {str(e)}") from e
+            raise IOError(f"Failed to save cropped image: {str(e)}") from e
     
     crop_info = {
         'crop_bbox': [x1, y1, x2, y2],
@@ -79,35 +67,20 @@ def zoom_in(image_path: str, bbox: str, output_path: str):
 
 
 def restore_bbox(cropped_bbox, crop_info):
-    """
-    将裁剪图像中的bbox坐标还原到原图中
     
-    Args:
-        cropped_bbox (list or str): 裁剪图像中的bbox坐标 [x1, y1, x2, y2]
-        crop_info (dict): zoom_in函数返回的裁剪区域信息
-    
-    Returns:
-        list: 还原到原图的bbox坐标 [x1, y1, x2, y2]
-    """
-    
-    # 如果是字符串，先解析为列表
     if isinstance(cropped_bbox, str):
         cropped_bbox = ast.literal_eval(cropped_bbox)
     
-    # 获取原始裁剪区域的偏移量
     crop_x1, crop_y1, crop_x2, crop_y2 = crop_info['crop_bbox']
     original_width, original_height = crop_info['original_size']
     
-    # 裁剪图像中的bbox坐标
     crop_box_x1, crop_box_y1, crop_box_x2, crop_box_y2 = cropped_bbox
     
-    # 还原到原图的坐标 = 裁剪图像中的坐标 + 裁剪区域的偏移量
     restored_x1 = crop_box_x1 + crop_x1
     restored_y1 = crop_box_y1 + crop_y1
     restored_x2 = crop_box_x2 + crop_x1
     restored_y2 = crop_box_y2 + crop_y1
     
-    # 确保坐标在原图范围内
     restored_x1 = max(0, min(restored_x1, original_width))
     restored_y1 = max(0, min(restored_y1, original_height))
     restored_x2 = max(0, min(restored_x2, original_width))
@@ -123,7 +96,6 @@ def get_gt_pairs(data):
 
     gt_pairs = []
     for value in data['relations'].values():
-        # 检查 value 是否为 None
         if value is not None:
             for v in value:
                 gt_pairs.append(v)
@@ -134,33 +106,18 @@ def get_gt_pairs(data):
     return entities, gt_pairs
 
 def convert_bbox_xywh_to_xyxy(bbox):
-    """
-    将bbox从[x,y,w,h]格式转换为[x1,y1,x2,y2]格式
     
-    Args:
-        bbox (list or str): [x, y, w, h] 格式的边界框坐标
-                           x, y: 左上角坐标
-                           w, h: 宽度和高度
-    
-    Returns:
-        list: [x1, y1, x2, y2] 格式的边界框坐标
-              x1, y1: 左上角坐标
-              x2, y2: 右下角坐标
-    """
-    
-    # 如果是字符串，先解析为列表
     if isinstance(bbox, str):
         try:
             bbox = ast.literal_eval(bbox)
         except (ValueError, SyntaxError) as e:
-            raise ValueError(f"无法解析边界框字符串: {bbox}") from e
+            raise ValueError(f"Failed to parse bbox string: {bbox}") from e
     
     try:
         x, y, w, h = map(float, bbox)
     except (ValueError, TypeError) as e:
-        raise ValueError(f"边界框坐标必须是数字: {bbox}") from e
+        raise ValueError(f"Bbox coordinates must be numbers: {bbox}") from e
     
-    # 转换为 [x1, y1, x2, y2] 格式
     x1 = x
     y1 = y
     x2 = x + w
@@ -170,29 +127,17 @@ def convert_bbox_xywh_to_xyxy(bbox):
 
 
 def convert_bbox_xyxy_to_xywh(bbox):
-    """
-    将bbox从[x1,y1,x2,y2]格式转换为[x,y,w,h]格式
-    
-    Args:
-        bbox (list or str): [x1, y1, x2, y2] 格式的边界框坐标
-    
-    Returns:
-        list: [x, y, w, h] 格式的边界框坐标
-    """
-    
-    # 如果是字符串，先解析为列表
     if isinstance(bbox, str):
         try:
             bbox = ast.literal_eval(bbox)
         except (ValueError, SyntaxError) as e:
-            raise ValueError(f"无法解析边界框字符串: {bbox}") from e
+            raise ValueError(f"Failed to parse bbox string: {bbox}") from e
     
     try:
         x1, y1, x2, y2 = map(float, bbox)
     except (ValueError, TypeError) as e:
-        raise ValueError(f"边界框坐标必须是数字: {bbox}") from e
+        raise ValueError(f"Bbox coordinates must be numbers: {bbox}") from e
     
-    # 转换为 [x, y, w, h] 格式
     x = x1
     y = y1
     w = x2 - x1

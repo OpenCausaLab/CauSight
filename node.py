@@ -66,7 +66,7 @@ class TreeNode:
                         pairs = extract_content('entity pairs', result)
                         if pairs is None:
                             logging.warning(f"No entity pairs found in result: {result}")
-                            pairs = "[]"  # 使用空列表作为默认值
+                            pairs = "[]"
                     except Exception as e:
                         logging.error(f"Error extracting content: {str(e)}")
                         raise
@@ -91,7 +91,7 @@ class TreeNode:
                                 p_copy[list(p_copy.keys())[1]] = restore_bbox(p_copy[list(p_copy.keys())[1]], crop_info)
                                 restore_pairs.append(p_copy)
                             except Exception as e:
-                                logging.warning(f"不正确的pair格式需要舍弃: {str(e)}")
+                                logging.warning(f"Invalid pair format: {str(e)}")
                                 continue
                     else:
                         raise ValueError("Crop info is not set")
@@ -103,7 +103,7 @@ class TreeNode:
                         pairs = extract_content('causal pairs', result)
                         if pairs is None:
                             logging.warning(f"No causal pairs found in result: {result}")
-                            pairs = "[]"  # 使用空列表作为默认值
+                            pairs = "[]"
                     except Exception as e:
                         logging.error(f"Error extracting content: {str(e)}")
                         raise
@@ -126,7 +126,7 @@ class TreeNode:
                                 p_copy[list(p_copy.keys())[1]] = restore_bbox(p_copy[list(p_copy.keys())[1]], self.crop_info)
                                 restore_pairs.append(p_copy)
                             except Exception as e:
-                                logging.warning(f"不正确的pair格式需要舍弃: {str(e)}")
+                                logging.warning(f"Invalid pair format: {str(e)}")
                                 continue
                     else:
                         raise ValueError("Crop info error")

@@ -73,7 +73,6 @@ class MCTSTask:
                     logging.error(f"Failed to initialize root sub_node: {str(e)}")
                     continue
             
-            # 如果没有成功创建任何子节点，将当前节点标记为终端节点
             if not proposed_sub_nodes:
                 current_node.is_terminal = True
                 return None
@@ -101,7 +100,7 @@ class MCTSTask:
                         temp_file = tempfile.NamedTemporaryFile(
                             suffix='.jpg', 
                             delete=False,
-                            dir=f'temp/{idid}'  # 指定目录
+                            dir=f'temp/{idid}'
                         )
                         self.temp_image_path = temp_file.name
                         temp_file.close()
@@ -138,7 +137,6 @@ class MCTSTask:
                     logging.error(f"Failed to initialize sub_node: {str(e)}")
                     continue
             
-            # 如果没有成功创建任何子节点，将当前节点标记为终端节点
             if not proposed_sub_nodes:
                 current_node.is_terminal = True
                 return None

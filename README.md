@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="asset/title.png">
-</p>
-
 <div id="top" align="center">
 
 **CauSight**: *Learning to Supersense for **Visual Causal Discovery***
@@ -81,14 +77,4 @@ If you want to make your own SFT data with Tree-of-Causal-Thought, run:
 ```bash
 bash model_server.sh
 python run.py
-```
-
-## Citation
-```BibTeX
-@article{zhang2025causight,
-  title={CauSight: Learning to Supersense for Visual Causal Discovery},
-  author={Zhang, Yize and Chen, Meiqi and Chen, Sirui and Peng, Bo and Zhang, Yanxi and Li, Tianyu and Lu, Chaochao},
-  journal={arXiv preprint arXiv:2512.01827},
-  year={2025}
-}
 ```

@@ -113,7 +113,7 @@ def generate(image_url: str, prompt: str, num_completions: int = 1) -> Optional[
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    result = generate("https://qianwen-res.oss-cn-beijing.aliyuncs.com/Qwen-VL/assets/demo.jpeg", "What's in this image?")
+    result = generate("https://XXX/assets/demo.jpeg", "What's in this image?")
     if result:
         for i in result:
             print(i)

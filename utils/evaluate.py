@@ -9,13 +9,6 @@ import logging
 
 def evaluate(entities, gt_pairs, predicted_pairs):
     """
-    评估预测的因果关系对的准确性
-    
-    Args:
-        entities: 实体列表，每个实体是一个字典 {name: bbox}
-        gt_pairs: 真实的因果关系对列表
-        predicted_pairs: 预测的因果关系对列表，每个对是一个字典 {cause: bbox, effect: bbox}
-    
     Returns:
         tuple: (accuracy, f1, reward)
     """
@@ -100,7 +93,7 @@ def evaluate(entities, gt_pairs, predicted_pairs):
     for relation in predicted_relations:
         try:
             r1, r2 = relation[0]['index'], relation[1]['index']
-            unique_relations.add((r1, r2))  # set 会自动去重
+            unique_relations.add((r1, r2))
         except (IndexError, KeyError) as e:
             logging.error(f"Error checking relation {relation}: {str(e)}")
             continue

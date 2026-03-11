@@ -10,25 +10,19 @@ class FlexibleImageHandler(BaseHTTPRequestHandler):
     
     def do_GET(self):
         try:
-            # 解码URL路径，得到绝对文件路径
-            file_path = unquote(self.path[1:])  # 去掉开头的'/'
+            file_path = unquote(self.path[1:])
             
-            # 确保使用绝对路径
             if not os.path.isabs(file_path):
-                # 如果不是绝对路径，添加根目录
                 file_path = '/' + file_path
             
-            # 检查文件是否存在
             if not os.path.exists(file_path):
                 self.send_error(404, f"File not found: {file_path}")
                 return
             
-            # 获取文件MIME类型
             content_type, _ = mimetypes.guess_type(file_path)
             if content_type is None:
                 content_type = 'application/octet-stream'
             
-            # 发送文件
             self.send_response(200)
             self.send_header('Content-type', content_type)
             self.send_header('Access-Control-Allow-Origin', '*')
@@ -49,19 +43,18 @@ class ImageServer:
         self._ready = threading.Event()
         
     def start(self):
-        """启动服务器 - 不需要指定目录"""
         if self.server is not None:
-            print("服务器已经在运行中")
+            print("Server is already running")
             return
         
         def run_server():
             try:
                 self.server = HTTPServer(('localhost', self.port), FlexibleImageHandler)
-                print(f"图片服务器已启动，端口: {self.port}")
+                print(f"Image server started on port: {self.port}")
                 self._ready.set()
                 self.server.serve_forever()
             except Exception as e:
-                print(f"服务器启动失败: {e}")
+                print(f"Server startup failed: {e}")
                 self._ready.set()
         
         self.thread = threading.Thread(target=run_server)
@@ -71,23 +64,21 @@ class ImageServer:
         
         self._ready.wait(timeout=5)
         if not self._ready.is_set():
-            raise RuntimeError("服务器启动超时")
+            raise RuntimeError("Server startup timeout")
         
     def stop(self):
-        """停止服务器"""
         if self.server is not None:
             self.server.shutdown()
             self.server.server_close()
             self.server = None
             self.thread = None
-            print("服务器已关闭")
+            print("Server closed")
             self._ready.clear()
     
     def get_url(self, local_path):
         if not self._ready.is_set():
-            raise RuntimeError("服务器未启动或启动失败")
+            raise RuntimeError("Server not started or startup failed")
         
-        # 获取绝对路径
         abs_path = os.path.abspath(local_path)
         encoded_path = quote(abs_path)
         return f"http://localhost:{self.port}/{encoded_path.lstrip('/')}"
